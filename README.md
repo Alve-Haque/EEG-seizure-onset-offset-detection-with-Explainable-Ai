@@ -40,55 +40,193 @@ To ensure **clinical transparency and trust**, we integrate **Explainable Artifi
 
 ## 🔧 Signal Preprocessing
 
-- 50 Hz IIR notch filter  
-- FIR bandpass filter (0.5–70 Hz)  
-- Resampling to 250 Hz  
-- Channel selection (6 channels)  
-- Sliding window segmentation  
+EEG signals exhibit noise, variable sampling rates, and inconsistent lengths. A standardized preprocessing pipeline is applied to ensure robustness.
+
+### 1. Noise Removal
+- **50 Hz IIR Notch Filter**  
+  Removes power-line interference while preserving neural activity.
+
+### 2. Bandpass Filtering
+- **FIR Bandpass Filter (0.5–70 Hz)**  
+  Retains clinically relevant EEG bands:
+  - Delta
+  - Theta
+  - Alpha
+  - Beta
+  - Gamma
+
+### 3. Resampling
+- All signals are resampled to **250 Hz** to ensure uniform temporal resolution.
+
+### 4. Channel Selection
+- From 19 channels, **6 representative channels** are selected to:
+  - Reduce redundancy
+  - Lower computational cost
+  - Preserve seizure-relevant activity
+
+### 5. Segmentation
+- Sliding window segmentation is used
+- Short signals are padded to maintain consistency
 
 ---
 
 ## 🔄 Data Pipeline
 
-Raw EEG → Filtering → Resampling → Segmentation → Model Input
+```
+Raw EEG Signals
+      ↓
+Notch Filtering (50 Hz)
+      ↓
+Bandpass Filtering (0.5–70 Hz)
+      ↓
+Resampling (250 Hz)
+      ↓
+Channel Selection (6 Channels)
+      ↓
+Segmentation (Sliding Windows)
+      ↓
+Model Input
+```
+
+Two parallel pipelines are used depending on the method:
+
+- **Method 1:** Feature extraction → Fully connected model  
+- **Method 2:** Raw signal → CNN–BiLSTM–Attention model
 
 ---
 
-## 🧪 Method 1: Feature-Based Model
+## 🧪 Method 1: Feature-Based Signal Processing Model
 
-- Frequency-domain features: Delta, Theta, Alpha, Beta, Gamma  
-- Time-domain features: Mean, Std, RMS, Skewness, Kurtosis  
-- Total features: 60  
+### Feature Extraction
 
-Fully connected network with classification and regression heads.
+For each of the 6 EEG channels:
+
+#### Frequency-Domain Features
+- Delta band power
+- Theta band power
+- Alpha band power
+- Beta band power
+- Gamma band power
+
+#### Time-Domain Statistical Features
+- Mean
+- Standard deviation
+- Root Mean Square (RMS)
+- Skewness
+- Kurtosis
+
+➡ **Total features:** 60 per EEG segment
 
 ---
 
-## 🤖 Method 2: CNN + BiLSTM + Attention
+### Model Architecture
 
-- Residual 1D CNN layers  
-- 3-layer BiLSTM  
-- Attention mechanism for interpretability  
-- Dual output heads (classification + regression)
+- Fully connected layers:  
+  `60 → 256 → 128 → 64`
+- ReLU activations
+- Dropout (p = 0.3)
+
+#### Dual Output Heads
+- **Classification Head:** Seizure vs Non-seizure
+- **Regression Head:** Seizure onset & offset prediction
+
+This method provides a strong interpretable baseline but struggles with complex temporal dependencies.
 
 ---
 
-## 🧠 Explainable AI (XAI)
+## 🤖 Method 2: CNN + BiLSTM + Attention (Deep Learning)
 
-Attention weights are visualized as heatmaps over EEG signals, highlighting seizure-relevant regions and improving clinical trust.
+This method automatically learns spatial and temporal EEG representations.
+
+### Model Components
+
+#### 1. Instance Normalization
+- Stabilizes training across patients and recording conditions
+
+#### 2. Residual 1D CNN Layers
+- Capture local temporal EEG patterns
+- Residual connections prevent vanishing gradients
+
+#### 3. BiLSTM (3 Layers)
+- Models long-range temporal dependencies
+- Processes EEG signals forward and backward in time
+
+#### 4. Attention Mechanism
+- Assigns importance weights to time steps
+- Highlights seizure-relevant EEG regions
+
+#### 5. Dual Output Heads
+- **Classification:** Seizure probability
+- **Regression:** Seizure onset & offset times
+
+---
+
+### Training Configuration
+
+- Optimizer: Adam  
+- Learning rate: 0.001  
+- Dropout: 0.3  
+- Epochs: 30  
+- Stable convergence with minimal overfitting
+
+---
+
+## 🧠 Explainable AI (XAI) Techniques
+
+Deep learning models are often criticized as “black boxes.”  
+This project integrates **attention-based explainability** to address this issue.
+
+### How XAI Works Here
+
+- Attention scores are extracted during inference
+- Scores are upsampled to match original EEG length
+- Heatmaps are overlaid on EEG waveforms
+
+### Interpretation
+
+- **Bright regions:** High importance (model focus)
+- **Dark regions:** Low contribution
+
+These regions frequently align with clinically meaningful seizure activity.
+
+---
+
+### Benefits of XAI Integration
+
+✔ Improves clinical trust  
+✔ Validates model reasoning  
+✔ Enhances transparency  
+✔ Supports real-world medical adoption  
 
 ---
 
 ## 📈 Results Summary
 
-Feature-based model provides a baseline, while the CNN–BiLSTM–Attention model achieves significantly higher accuracy and better onset–offset localization.
+| Method | Accuracy | F1-Score | Onset MAE | Offset MAE |
+|------|--------|--------|----------|-----------|
+| Feature-Based | 56.86% | 0.53 | 75.31 s | 124.89 s |
+| CNN + BiLSTM + Attention | ~83% | +24% ↑ | Significantly lower | Significantly lower |
+
+Method 2 outperforms Method 1 in **accuracy, robustness, and interpretability**.
 
 ---
 
-## 🚀 Future Work
+## 🚀 Future Improvements
 
-- Larger datasets  
-- Real-time detection  
-- Patient-specific models  
-- Advanced XAI methods
+- Larger and more diverse EEG datasets
+- Real-time seizure detection systems
+- Patient-specific adaptive models
+- Advanced XAI techniques (SHAP, saliency maps)
+- Deployment-ready clinical pipelines
 
+---
+
+## 📚 Citation
+
+If you use this work, please cite the associated paper.
+
+---
+
+## 🤝 Acknowledgments
+
+This project was developed as part of an academic research initiative focused on applying AI to biomedical signal processing and clinical decision support.
