@@ -33,6 +33,26 @@ This project presents a **comparative, data-driven framework** for automated sei
 To ensure **clinical transparency and trust**, we integrate **Explainable Artificial Intelligence (XAI)** techniques that visually highlight which EEG regions influence the model’s decisions.
 
 ---
+## 💼 Business Value
+
+This project delivers tangible value across **clinical, research, and commercial domains** by combining high-performance seizure detection with interpretability.
+
+### Clinical Impact
+- Enables **early and accurate seizure detection**, improving patient safety
+- Provides **transparent decision support** through XAI, increasing clinician trust
+- Supports seizure **onset–offset localization**, aiding treatment planning
+
+### Research & Innovation Value
+- Serves as a **benchmark framework** for EEG-based seizure analysis
+- Demonstrates how attention mechanisms enhance both **performance and interpretability**
+- Easily extensible for patient-specific and real-time systems
+
+### Operational & Commercial Value
+- Reduces reliance on manual EEG review, lowering **operational costs**
+- Scalable architecture suitable for **hospital monitoring systems**
+- Strong foundation for **medical AI products**, clinical tools, and regulatory pathways
+
+By bridging accuracy, interpretability, and scalability, this system is well-positioned for real-world deployment in healthcare environments.
 
 ## ✨ Key Contributions
 
@@ -249,25 +269,4 @@ If you use this work, please cite the associated paper.
 
 This project was developed as part of an academic research initiative focused on applying AI to biomedical signal processing and clinical decision support.
 ---
-
-## 💼 Business Value
-
-This project delivers tangible value across **clinical, research, and commercial domains** by combining high-performance seizure detection with interpretability.
-
-### Clinical Impact
-- Enables **early and accurate seizure detection**, improving patient safety
-- Provides **transparent decision support** through XAI, increasing clinician trust
-- Supports seizure **onset–offset localization**, aiding treatment planning
-
-### Research & Innovation Value
-- Serves as a **benchmark framework** for EEG-based seizure analysis
-- Demonstrates how attention mechanisms enhance both **performance and interpretability**
-- Easily extensible for patient-specific and real-time systems
-
-### Operational & Commercial Value
-- Reduces reliance on manual EEG review, lowering **operational costs**
-- Scalable architecture suitable for **hospital monitoring systems**
-- Strong foundation for **medical AI products**, clinical tools, and regulatory pathways
-
-By bridging accuracy, interpretability, and scalability, this system is well-positioned for real-world deployment in healthcare environments.
 
