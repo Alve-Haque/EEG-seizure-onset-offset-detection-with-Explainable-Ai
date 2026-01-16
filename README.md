@@ -3,6 +3,25 @@
 
 ---
 
+## 📑 Table of Contents
+
+1. Overview  
+2. Key Contributions  
+3. Dataset Description  
+4. Signal Preprocessing  
+5. Data Pipeline  
+6. Method 1: Feature-Based Signal Processing Model  
+7. Method 2: CNN + BiLSTM + Attention  
+8. Explainable AI (XAI) Techniques  
+9. Results Summary  
+10. Future Improvements  
+11. Business Value  
+12. Citation  
+13. Acknowledgments
+
+---
+
+
 ## 📌 Overview
 
 Epileptic seizure detection from Electroencephalography (EEG) signals is a critical task in clinical neuroscience. Manual EEG interpretation is time-consuming, subjective, and prone to error due to the complex temporal dynamics of brain activity.
@@ -230,3 +249,26 @@ If you use this work, please cite the associated paper.
 ## 🤝 Acknowledgments
 
 This project was developed as part of an academic research initiative focused on applying AI to biomedical signal processing and clinical decision support.
+---
+
+## 💼 Business Value
+
+This project delivers tangible value across **clinical, research, and commercial domains** by combining high-performance seizure detection with interpretability.
+
+### Clinical Impact
+- Enables **early and accurate seizure detection**, improving patient safety
+- Provides **transparent decision support** through XAI, increasing clinician trust
+- Supports seizure **onset–offset localization**, aiding treatment planning
+
+### Research & Innovation Value
+- Serves as a **benchmark framework** for EEG-based seizure analysis
+- Demonstrates how attention mechanisms enhance both **performance and interpretability**
+- Easily extensible for patient-specific and real-time systems
+
+### Operational & Commercial Value
+- Reduces reliance on manual EEG review, lowering **operational costs**
+- Scalable architecture suitable for **hospital monitoring systems**
+- Strong foundation for **medical AI products**, clinical tools, and regulatory pathways
+
+By bridging accuracy, interpretability, and scalability, this system is well-positioned for real-world deployment in healthcare environments.
+
