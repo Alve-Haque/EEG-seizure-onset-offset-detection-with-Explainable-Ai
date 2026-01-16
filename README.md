@@ -227,6 +227,9 @@ This project integrates **attention-based explainability** to address this issue
 
 These regions frequently align with clinically meaningful seizure activity.
 
+![XAI Seizure Signal Visualization](Xai-seizure-signal.png)
+
+![XAI Seizure Signal Visualization](Xai-non-seizure-signal.png)
 ---
 
 ### Benefits of XAI Integration
