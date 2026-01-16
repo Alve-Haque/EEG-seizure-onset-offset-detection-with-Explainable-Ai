@@ -5,19 +5,19 @@
 
 ## 📑 Table of Contents
 
-1. Overview  
-2. Key Contributions  
-3. Dataset Description  
-4. Signal Preprocessing  
-5. Data Pipeline  
-6. Method 1: Feature-Based Signal Processing Model  
-7. Method 2: CNN + BiLSTM + Attention  
-8. Explainable AI (XAI) Techniques  
-9. Results Summary  
-10. Future Improvements  
-11. Business Value  
-12. Citation  
-13. Acknowledgments
+- [Overview](#-overview)
+- [Key Contributions](#-key-contributions)
+- [Dataset Description](#-dataset-description)
+- [Signal Preprocessing](#-signal-preprocessing)
+- [Data Pipeline](#-data-pipeline)
+- [Method 1: Feature-Based Signal Processing Model](#-method-1-feature-based-signal-processing-model)
+- [Method 2: CNN + BiLSTM + Attention (Deep Learning)](#-method-2-cnn--bilstm--attention-deep-learning)
+- [Explainable AI (XAI) Techniques](#-explainable-ai-xai-techniques)
+- [Results Summary](#-results-summary)
+- [Future Improvements](#-future-improvements)
+- [Business Value](#-business-value)
+- [Citation](#-citation)
+- [Acknowledgments](#-acknowledgments)
 
 ---
 
