@@ -1,128 +1,274 @@
-# Artificial-Intelligence-in-Medicine-Competition
-
-**Short Description (≈350 characters):**  
-This project presents a complete EEG-based seizure detection framework integrating advanced signal preprocessing, spectral and temporal feature extraction, and a hybrid CNN–LSTM model with an attention mechanism to provide accurate seizure classification and interpretable onset estimation.
+# 🧠 Data-Driven Epileptic Seizure Detection from EEG  
+### With Complementary Explainable AI (XAI) Analysis
 
 ---
 
-# 1. Introduction
+## 📑 Table of Contents
 
-This repository contains the complete implementation developed for the **Artificial Intelligence in Medicine Competition**, focusing on automated seizure detection using multichannel EEG signals. The project aims to design a robust, interpretable, and computationally efficient pipeline capable of identifying seizure events and estimating seizure onset and offset with high precision.
-
-The workflow spans three phases:
-1. **Data extraction and preprocessing**
-2. **Deep learning model training**
-3. **Visualization and explainability**
-
-The project demonstrates the integration of classical biomedical signal processing methods with modern deep learning architectures tailored for temporal physiological data.
-
----
-
-# 2. Key Features
-
-### **Signal Processing & Data Standardization**
-- Removal of 50 Hz electrical interference using **IIR notch filtering**
-- **FIR bandpass filtering (0.5–70 Hz)** to preserve physiological EEG frequencies
-- Resampling EEG signals to **250 Hz** for uniformity
-- Extraction of fixed-length segments (first 300 seconds)
-- Storage of processed arrays and annotation labels in `.npy` format
-
-### **Feature Engineering**
-- **Power Spectral Density (PSD)** using Welch’s method
-- **Bandpower extraction** across clinically relevant EEG bands:
-  - Delta (0.5–4 Hz)
-  - Theta (4–8 Hz)
-  - Alpha (8–12 Hz)
-  - Beta (12–30 Hz)
-  - Gamma (30–70 Hz)
-- Time-domain metrics:
-  - Mean, Standard Deviation, RMS  
-  - Skewness, Kurtosis
-
-### **Deep Learning Model**
-A hybrid seizure detection architecture:
-- **CNN layers**: capture localized temporal patterns
-- **LSTM layers**: learn long-term dependencies in EEG
-- **Attention mechanism**: highlight critical time steps contributing to seizure prediction
-- Multi-task loss:
-  - Binary Cross-Entropy for seizure classification  
-  - Weighted MSE for onset/offset regression  
-  - Combined total loss = BCE + 0.5 × MSE
-
-### **Explainable AI (XAI)**
-- Extraction of attention weight vectors
-- Upsampling attention to original EEG length
-- Visualization of EEG waveforms with heatmap overlays
-- Identification of EEG regions most relevant to model decision-making
+- [Overview](#-overview)
+- [Key Contributions](#-key-contributions)
+- [Dataset Description](#-dataset-description)
+- [Signal Preprocessing](#-signal-preprocessing)
+- [Data Pipeline](#-data-pipeline)
+- [Method 1: Feature-Based Signal Processing Model](#-method-1-feature-based-signal-processing-model)
+- [Method 2: CNN + BiLSTM + Attention (Deep Learning)](#-method-2-cnn--bilstm--attention-deep-learning)
+- [Explainable AI (XAI) Techniques](#-explainable-ai-xai-techniques)
+- [Results Summary](#-results-summary)
+- [Future Improvements](#-future-improvements)
+- [Business Value](#-business-value)
+- [Citation](#-citation)
+- [Acknowledgments](#-acknowledgments)
 
 ---
 
-# 3. Installation
 
-Ensure **Python 3.x** is installed.
+## 📌 Overview
 
-Install required dependencies:
+Epileptic seizure detection from Electroencephalography (EEG) signals is a critical task in clinical neuroscience. Manual EEG interpretation is time-consuming, subjective, and prone to error due to the complex temporal dynamics of brain activity.
 
-```bash
-pip install numpy==1.24.0 \
-             pandas==1.5.3 \
-             scipy==1.9.3 \
-             tqdm==4.64.0 \
-             torch>=1.10.0 \
-             matplotlib==3.6.3 \
-             seaborn==0.11.2 \
-             scikit-learn==1.0.2 \
-             mne==1.3.1
+This project presents a **comparative, data-driven framework** for automated seizure detection and seizure onset–offset localization using EEG signals. Two complementary approaches are explored:
 
-## 4. File Overview
+1. **Classical signal processing with handcrafted features**
+2. **A deep learning architecture combining CNN, BiLSTM, and Attention**
 
-### 4.1. visualization.ipynb
-This notebook provides comprehensive visualization tools to interpret EEG signals and model outputs:
-
-- Visualization of raw and filtered EEG signals  
-- PSD plots to analyze power distribution across frequencies  
-- Overlay of attention heatmaps on EEG signals for XAI  
-- Visual comparison of seizure vs. non-seizure patterns  
-
-It is the final diagnostic tool in the workflow, allowing users to inspect how the model interprets EEG patterns.
+To ensure **clinical transparency and trust**, we integrate **Explainable Artificial Intelligence (XAI)** techniques that visually highlight which EEG regions influence the model’s decisions.
 
 ---
 
-### 4.2. seizure_nonseizure_data_extraction.ipynb
-This notebook performs all preprocessing required to prepare the dataset for modeling:
+## ✨ Key Contributions
 
-- Loading raw EEG signals  
-- Removing powerline interference using a 50 Hz notch filter  
-- Applying a 0.5–70 Hz FIR bandpass filter  
-- Selecting seizure intervals recorded at 250–256 Hz  
-- Resampling all signals to a unified 250 Hz format  
-- Extracting the first 300 seconds of each signal  
-- Saving processed signals and seizure onset/offset labels as `.npy` files  
-
-This notebook must be executed before training the model.
+- Dual-method comparison: feature-based vs deep learning
+- Accurate **seizure classification** and **onset–offset regression**
+- Robust handling of **heterogeneous EEG data**
+- Attention-based **Explainable AI** visualizations
+- Clinically interpretable and scalable design
 
 ---
 
-### 4.3. model_train.ipynb
-This notebook implements the complete training workflow:
+## 📊 Dataset Description
 
-- CNN + LSTM + Attention model definition  
-- Train/validation split and data loading  
-- Weighted multi-task loss computation (classification + regression)  
-- Performance tracking (loss curves, accuracy)  
-- Saving trained model weights for inference  
-
-The architecture is optimized for temporal pattern recognition and onset/offset prediction.
+- **Total EEG recordings:** 6,190  
+  - Seizure: 2,421  
+  - Non-seizure: 3,769
+- **Channels:** 19 original EEG channels (reduced to 6)
+- **Sampling frequencies:** 250, 256, 400, 500, 1000 Hz
+- **Signal duration:** Up to 60 minutes
+- **Annotations:** Seizure onset and offset timestamps
 
 ---
 
-## 5. Usage
+## 🔧 Signal Preprocessing
 
-Clone the repository and open each notebook in order:
+EEG signals exhibit noise, variable sampling rates, and inconsistent lengths. A standardized preprocessing pipeline is applied to ensure robustness.
 
-1. **seizure_nonseizure_data_extraction.ipynb** – preprocess the data  
-2. **model_train.ipynb** – train the deep learning model  
-3. **visualization.ipynb** – visualize results and model explanations  
+### 1. Noise Removal
+- **50 Hz IIR Notch Filter**  
+  Removes power-line interference while preserving neural activity.
 
-Each notebook contains sequential, executable workflow blocks.  
-No additional example code is required.
+### 2. Bandpass Filtering
+- **FIR Bandpass Filter (0.5–70 Hz)**  
+  Retains clinically relevant EEG bands:
+  - Delta
+  - Theta
+  - Alpha
+  - Beta
+  - Gamma
+
+### 3. Resampling
+- All signals are resampled to **250 Hz** to ensure uniform temporal resolution.
+
+### 4. Channel Selection
+- From 19 channels, **6 representative channels** are selected to:
+  - Reduce redundancy
+  - Lower computational cost
+  - Preserve seizure-relevant activity
+
+### 5. Segmentation
+- Sliding window segmentation is used
+- Short signals are padded to maintain consistency
+
+---
+
+## 🔄 Data Pipeline
+
+```
+Raw EEG Signals
+      ↓
+Notch Filtering (50 Hz)
+      ↓
+Bandpass Filtering (0.5–70 Hz)
+      ↓
+Resampling (250 Hz)
+      ↓
+Channel Selection (6 Channels)
+      ↓
+Segmentation (Sliding Windows)
+      ↓
+Model Input
+```
+
+Two parallel pipelines are used depending on the method:
+
+- **Method 1:** Feature extraction → Fully connected model  
+- **Method 2:** Raw signal → CNN–BiLSTM–Attention model
+
+---
+
+## 🧪 Method 1: Feature-Based Signal Processing Model
+
+### Feature Extraction
+
+For each of the 6 EEG channels:
+
+#### Frequency-Domain Features
+- Delta band power
+- Theta band power
+- Alpha band power
+- Beta band power
+- Gamma band power
+
+#### Time-Domain Statistical Features
+- Mean
+- Standard deviation
+- Root Mean Square (RMS)
+- Skewness
+- Kurtosis
+
+➡ **Total features:** 60 per EEG segment
+
+---
+
+### Model Architecture
+
+- Fully connected layers:  
+  `60 → 256 → 128 → 64`
+- ReLU activations
+- Dropout (p = 0.3)
+
+#### Dual Output Heads
+- **Classification Head:** Seizure vs Non-seizure
+- **Regression Head:** Seizure onset & offset prediction
+
+This method provides a strong interpretable baseline but struggles with complex temporal dependencies.
+
+---
+
+## 🤖 Method 2: CNN + BiLSTM + Attention (Deep Learning)
+
+This method automatically learns spatial and temporal EEG representations.
+
+### Model Components
+
+#### 1. Instance Normalization
+- Stabilizes training across patients and recording conditions
+
+#### 2. Residual 1D CNN Layers
+- Capture local temporal EEG patterns
+- Residual connections prevent vanishing gradients
+
+#### 3. BiLSTM (3 Layers)
+- Models long-range temporal dependencies
+- Processes EEG signals forward and backward in time
+
+#### 4. Attention Mechanism
+- Assigns importance weights to time steps
+- Highlights seizure-relevant EEG regions
+
+#### 5. Dual Output Heads
+- **Classification:** Seizure probability
+- **Regression:** Seizure onset & offset times
+
+---
+
+### Training Configuration
+
+- Optimizer: Adam  
+- Learning rate: 0.001  
+- Dropout: 0.3  
+- Epochs: 30  
+- Stable convergence with minimal overfitting
+
+---
+
+## 🧠 Explainable AI (XAI) Techniques
+
+Deep learning models are often criticized as “black boxes.”  
+This project integrates **attention-based explainability** to address this issue.
+
+### How XAI Works Here
+
+- Attention scores are extracted during inference
+- Scores are upsampled to match original EEG length
+- Heatmaps are overlaid on EEG waveforms
+
+### Interpretation
+
+- **Bright regions:** High importance (model focus)
+- **Dark regions:** Low contribution
+
+These regions frequently align with clinically meaningful seizure activity.
+
+---
+
+### Benefits of XAI Integration
+
+✔ Improves clinical trust  
+✔ Validates model reasoning  
+✔ Enhances transparency  
+✔ Supports real-world medical adoption  
+
+---
+
+## 📈 Results Summary
+
+| Method | Accuracy | F1-Score | Onset MAE | Offset MAE |
+|------|--------|--------|----------|-----------|
+| Feature-Based | 56.86% | 0.53 | 75.31 s | 124.89 s |
+| CNN + BiLSTM + Attention | ~83% | +24% ↑ | Significantly lower | Significantly lower |
+
+Method 2 outperforms Method 1 in **accuracy, robustness, and interpretability**.
+
+---
+
+## 🚀 Future Improvements
+
+- Larger and more diverse EEG datasets
+- Real-time seizure detection systems
+- Patient-specific adaptive models
+- Advanced XAI techniques (SHAP, saliency maps)
+- Deployment-ready clinical pipelines
+
+---
+
+## 📚 Citation
+
+If you use this work, please cite the associated paper.
+
+---
+
+## 🤝 Acknowledgments
+
+This project was developed as part of an academic research initiative focused on applying AI to biomedical signal processing and clinical decision support.
+---
+
+## 💼 Business Value
+
+This project delivers tangible value across **clinical, research, and commercial domains** by combining high-performance seizure detection with interpretability.
+
+### Clinical Impact
+- Enables **early and accurate seizure detection**, improving patient safety
+- Provides **transparent decision support** through XAI, increasing clinician trust
+- Supports seizure **onset–offset localization**, aiding treatment planning
+
+### Research & Innovation Value
+- Serves as a **benchmark framework** for EEG-based seizure analysis
+- Demonstrates how attention mechanisms enhance both **performance and interpretability**
+- Easily extensible for patient-specific and real-time systems
+
+### Operational & Commercial Value
+- Reduces reliance on manual EEG review, lowering **operational costs**
+- Scalable architecture suitable for **hospital monitoring systems**
+- Strong foundation for **medical AI products**, clinical tools, and regulatory pathways
+
+By bridging accuracy, interpretability, and scalability, this system is well-positioned for real-world deployment in healthcare environments.
+
