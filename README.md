@@ -1,5 +1,4 @@
-# 🧠 Data-Driven Epileptic Seizure Detection from EEG  
-### With Complementary Explainable AI (XAI) Analysis
+# 🧠 EEG Signal Onset-Offset Detection With Explainable Ai
 
 ---
 
